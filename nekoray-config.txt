@@ -1,0 +1,56 @@
+# Nekoray / Nekobox — Configuración de Cliente Windows
+# Archivos a importar: .json o pegar URL directamente
+
+# ═══════════════════════════════════════════════════════════════════════
+# PERFIL 1: VLESS + XTLS-Vision (PRINCIPAL)
+# ═══════════════════════════════════════════════════════════════════════
+
+# Método más fácil: abrí Nekoray, Ctrl+V con esta URL:
+vless://0f848ac2-a329-4d52-96f2-701c38b5f75b@freepersonalbyscribax.com:443?encryption=none&security=tls&sni=freepersonalbyscribax.com&alpn=h2,http/1.1&flow=xtls-rprx-vision&type=tcp#LAB-VLESS-Vision
+
+# Configuración manual (Program → Preferences → Add):
+# ┌─────────────────────────────────────────────────────────────┐
+# │ Tipo (Type):        VLESS                                  │
+# │ Dirección (Addr):   freepersonalbyscribax.com               │
+# │ Puerto (Port):      443                                    │
+# │ UUID:               0f848ac2-a329-4d52-96f2-701c38b5f75b   │
+# │ Flow:               xtls-rprx-vision                       │
+# │ Encriptación:       none                                   │
+# │                                                             │
+# │ ── TLS Settings ──                                          │
+# │ Seguridad:          tls                                    │
+# │ SNI:                freepersonalbyscribax.com               │
+# │ ALPN:               h2,http/1.1                            │
+# │ Fingerprint:        chrome                                 │
+# │ Allow Insecure:     ☐ (DESMARCAR — usar cert real)         │
+# │                                                             │
+# │ ── Transport ──                                             │
+# │ Tipo:               tcp                                    │
+# │ Header Type:        none                                   │
+# └─────────────────────────────────────────────────────────────┘
+
+# ═══════════════════════════════════════════════════════════════════════
+# PERFIL 2: Trojan-GFW (ALTERNATIVO)
+# ═══════════════════════════════════════════════════════════════════════
+
+# Pegar URL:
+trojan://LjC53sJfZSxbIZlchMjappFq23i1Qmkr@freepersonalbyscribax.com:8443?security=tls&sni=freepersonalbyscribax.com&alpn=h2,http/1.1&type=tcp#LAB-Trojan
+
+# ═══════════════════════════════════════════════════════════════════════
+# CONFIGURACIÓN DE SISTEMA / TUN MODE (opcional)
+# ═══════════════════════════════════════════════════════════════════════
+
+# Para que todo el tráfico del sistema pase por el proxy:
+# Nekoray → Preferences → Route Settings → presets:
+#   - "Bypass LAN" (default: recomendado)
+#   - "Global" (TODO el tráfico — solo para pruebas de lab)
+#   - "Bypass LAN and China" (si querés excluir sitios chinos)
+
+# ═══════════════════════════════════════════════════════════════════════
+# VERIFICACIÓN DE CONEXIÓN
+# ═══════════════════════════════════════════════════════════════════════
+
+# Después de conectar, verificá:
+# 1. http://ip.sb — Debe mostrar 186.64.123.162 (IP del VPS)
+# 2. https://ipleak.net — Verificar que no haya fugas DNS/WebRTC
+# 3. Nekoray → Logs — Buscar "started" o errores de conexión

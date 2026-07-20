@@ -1,0 +1,89 @@
+# =============================================================================
+# LAB PROXY/VPN — GUÍA COMPLETA DE LABORATORIO
+# freepersonalbyscribax.com | 186.64.123.162
+# =============================================================================
+
+# ──── CREDENCIALES ────────────────────────────────────────────────────
+VLESS UUID:      0f848ac2-a329-4d52-96f2-701c38b5f75b
+TROJAN PASSWORD: LjC53sJfZSxbIZlchMjappFq23i1Qmkr
+DOMINIO:         freepersonalbyscribax.com
+PUERTO VLESS:    443
+PUERTO TROJAN:   8443
+
+# ═══════════════════════════════════════════════════════════════════════
+# 1. DESPLIEGUE EN EL VPS (copiar y pegar en SSH como root)
+# ═══════════════════════════════════════════════════════════════════════
+
+# PRIMERO: verificá que el DNS resuelve correctamente
+host freepersonalbyscribax.com 8.8.8.8
+# Debe devolver: freepersonalbyscribax.com has address 186.64.123.162
+
+# Subí el script setup-lab.sh al VPS y ejecutalo:
+scp setup-lab.sh root@186.64.123.162:/root/
+ssh root@186.64.123.162
+bash /root/setup-lab.sh
+
+# ═══════════════════════════════════════════════════════════════════════
+# 2. COMANDOS DE VERIFICACIÓN (post-instalación)
+# ═══════════════════════════════════════════════════════════════════════
+
+# Verificar estado de los servicios
+systemctl status xray
+systemctl status trojan
+systemctl status nginx
+
+# Verificar puertos en escucha
+ss -tlnp | grep -E ':(443|8443|80|22) '
+# Esperado: xray en :443, trojan en :8443, nginx en :80, sshd en :22
+
+# Verificar logs en tiempo real
+journalctl -u xray -f
+journalctl -u trojan -f
+
+# Probar conectividad TLS desde el VPS
+openssl s_client -connect 127.0.0.1:443 -servername freepersonalbyscribax.com </dev/null 2>/dev/null | head -20
+openssl s_client -connect 127.0.0.1:8443 -servername freepersonalbyscribax.com </dev/null 2>/dev/null | head -20
+
+# Ver certificado Let's Encrypt
+openssl x509 -in /etc/letsencrypt/live/freepersonalbyscribax.com/fullchain.pem -text -noout | grep -E '(Subject:|Issuer:|Not After)'
+
+# ═══════════════════════════════════════════════════════════════════════
+# 3. CONFIGURACIÓN DE CLIENTES
+# ═══════════════════════════════════════════════════════════════════════
+
+# ──── V2RayNG (Android) ───────────────────────────────────────────────
+# Opción A: Importar desde URL (la más fácil)
+#   Copiá esta URL completa y pegala en V2RayNG → + → Import from clipboard:
+vless://0f848ac2-a329-4d52-96f2-701c38b5f75b@freepersonalbyscribax.com:443?encryption=none&security=tls&sni=freepersonalbyscribax.com&alpn=h2,http/1.1&flow=xtls-rprx-vision&type=tcp#LAB-VLESS-Vision
+
+# Opción B: Importar archivo JSON (v2rayng-client-config.json)
+#   Copiá el archivo al celular y en V2RayNG → + → Import from file
+
+# Configuración manual en V2RayNG:
+#   Address:  freepersonalbyscribax.com
+#   Port:     443
+#   UUID:     0f848ac2-a329-4d52-96f2-701c38b5f75b
+#   Flow:     xtls-rprx-vision
+#   Security: tls
+#   Network:  tcp
+#   SNI:      freepersonalbyscribax.com
+#   ALPN:     h2,http/1.1
+#   uTLS:     chrome
+
+# ──── Nekoray / Nekobox (Windows) ──────────────────────────────────────
+# Opción A: Pegar URL compartida (Ctrl+V en la ventana principal)
+vless://0f848ac2-a329-4d52-96f2-701c38b5f75b@freepersonalbyscribax.com:443?encryption=none&security=tls&sni=freepersonalbyscribax.com&alpn=h2,http/1.1&flow=xtls-rprx-vision&type=tcp#LAB-VLESS-Vision
+
+# Opción B: Agregar manualmente en Nekoray:
+#   Tipo:       VLESS
+#   Address:    freepersonalbyscribax.com
+#   Port:       443
+#   UUID:       0f848ac2-a329-4d52-96f2-701c38b5f75b
+#   Flow:       xtls-rprx-vision
+#   Encryption: none
+#   TLS:        Reality (o TLS)
+#   SNI:        freepersonalbyscribax.com
+#   Transport:  tcp
+
+# ──── Trojan en ambos clientes ─────────────────────────────────────────
+trojan://LjC53sJfZSxbIZlchMjappFq23i1Qmkr@freepersonalbyscribax.com:8443?security=tls&sni=freepersonalbyscribax.com&alpn=h2,http/1.1&type=tcp#LAB-Trojan

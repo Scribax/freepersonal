@@ -1,0 +1,26 @@
+{
+  "run_type": "client",
+  "local_addr": "127.0.0.1",
+  "local_port": 1080,
+  "remote_addr": "freepersonalbyscribax.com",
+  "remote_port": 8443,
+  "password": ["LjC53sJfZSxbIZlchMjappFq23i1Qmkr"],
+  "log_level": 1,
+  "ssl": {
+    "verify": true,
+    "verify_hostname": true,
+    "cert": "",
+    "cipher": "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384",
+    "cipher_tls13": "TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256",
+    "sni": "freepersonalbyscribax.com",
+    "alpn": ["h2", "http/1.1"],
+    "reuse_session": true,
+    "session_ticket": false,
+    "curves": ""
+  },
+  "tcp": {
+    "no_delay": true,
+    "keep_alive": true,
+    "fast_open": false
+  }
+}
