@@ -87,7 +87,7 @@ echo -e "${GREEN}    ✓ Config actualizada${NC}"
 # ──── PASO 3: Verificar y recargar Nginx ──────────────────────────────
 echo -e "${YELLOW}[3/4] Verificando config de Nginx...${NC}"
 
-if nginx -t 2>&1; then
+if /usr/sbin/nginx -t 2>&1; then
     systemctl reload nginx
     echo -e "${GREEN}    ✓ Nginx recargado exitosamente${NC}"
 else
@@ -95,7 +95,7 @@ else
     LATEST_BAK=$(ls -t /etc/nginx/sites-available/default.bak.* 2>/dev/null | head -1)
     if [ -n "$LATEST_BAK" ]; then
         cp "$LATEST_BAK" /etc/nginx/sites-available/default
-        nginx -t && systemctl reload nginx
+        /usr/sbin/nginx -t && systemctl reload nginx
         echo -e "${RED}    ✗ Backup restaurado. Revisá el error arriba.${NC}"
     fi
     exit 1
